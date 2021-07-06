@@ -3,7 +3,7 @@ Repository and API for LeaderboardsPlus. Create and track your own custom statis
 
 ============
 
-More info here (spigot link)
+More info here: https://www.spigotmc.org/resources/leaderboardsplus-api.93973/
 
 # Wiki
 
