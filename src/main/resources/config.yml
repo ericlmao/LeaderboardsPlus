@@ -1,0 +1,7 @@
+data-save-interval: 120 # SECONDS
+
+no-data-placeholder: "N/A"
+
+internal-statistics:
+  kills: true
+  deaths: true
