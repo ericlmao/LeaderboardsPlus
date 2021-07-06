@@ -1,6 +1,5 @@
 package dev.negativekb.leaderboardsplus;
 
-import dev.negativekb.leaderboardsplus.commands.CommandForceRefresh;
 import dev.negativekb.leaderboardsplus.hook.PAPIHook;
 import dev.negativekb.leaderboardsplus.internal.PlayerListener;
 import dev.negativekb.leaderboardsplus.managers.LBManager;
@@ -31,7 +30,6 @@ public final class LeaderboardsPlus extends JavaPlugin {
 
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
-        getCommand("forcerefresh").setExecutor(new CommandForceRefresh());
     }
 
     @Override
