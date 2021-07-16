@@ -19,58 +19,45 @@ public class LBPlayer {
     public void setStatistic(String identifier, double value) {
         boolean valid = isValidStatistic(identifier);
         if (valid) {
-            for (String statistic : getStatistics()) {
-                String[] info = statistic.split(":");
-                String name = info[0];
-                if (name.equalsIgnoreCase(identifier)) {
-                    int index = getStatistics().indexOf(statistic);
-                    statistics.set(index, name + ":" + value);
-                    return;
-                }
-            }
+            ArrayList<String> statistics = getStatistics();
+            String stat = statistics.stream().filter(s -> s.split(":")[0].equalsIgnoreCase(identifier)).findFirst().orElse(null);
+            if (stat == null)
+                return;
+
+            String[] info = stat.split(":");
+            String name = info[0];
+            int index = statistics.indexOf(stat);
+            this.statistics.set(index, name + ":" + value);
         } else {
-            statistics.add(identifier + ":" + value);
+            this.statistics.add(identifier + ":" + value);
         }
     }
 
 
     public void deleteStatistic(String identifier) {
-        for (String statistic : getStatistics()) {
-            String[] info = statistic.split(":");
-            String name = info[0];
-            if (name.equalsIgnoreCase(identifier)) {
-                statistics.remove(statistic);
-                return;
-            }
-        }
+        String stat = getStatistics().stream().filter(s -> s.split(":")[0].equalsIgnoreCase(identifier)).findFirst().orElse(null);
+        if (stat == null)
+            return;
+
+        this.statistics.remove(stat);
     }
 
     public double getStatistic(String identifier) {
-        for (String statistic : getStatistics()) {
-            String[] info = statistic.split(":");
-            String name = info[0];
-            if (name.equalsIgnoreCase(identifier)) {
-                double value = 0;
-                try {
-                    String v = info[1];
-                    value = Double.parseDouble(v);
-                } catch (Exception ignored) {}
+        String stat = getStatistics().stream().filter(s -> s.split(":")[0].equalsIgnoreCase(identifier)).findFirst().orElse(null);
+        if (stat == null)
+            return 0;
 
-                return value;
-            }
+        String[] info = stat.split(":");
+        double value = 0;
+        try {
+            value = Double.parseDouble(info[1]);
+        } catch (Exception ignored) {}
 
-        }
-        return 0;
+        return value;
     }
 
     public boolean isValidStatistic(String identifier) {
-        for (String statistic : getStatistics()) {
-            String[] info = statistic.split(":");
-            String name = info[0];
-            if (name.equalsIgnoreCase(identifier))
-                return true;
-        }
-
-        return false;
+        String stat = getStatistics().stream().filter(s -> s.split(":")[0].equalsIgnoreCase(identifier)).findFirst().orElse(null);
+        return stat != null;
     }
 }

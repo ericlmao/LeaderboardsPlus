@@ -3,6 +3,7 @@ package dev.negativekb.leaderboardsplus.managers;
 import com.google.gson.Gson;
 import dev.negativekb.leaderboardsplus.LeaderboardsPlus;
 import dev.negativekb.leaderboardsplus.model.LBPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.*;
@@ -103,23 +104,17 @@ public class LBManager {
 
     public void refresh() {
         sortedStatistics.clear();
-        for (String statID : getRegisteredStatistics()) {
-            List<LBPlayer> players = getPlayers();
+        ArrayList<LBPlayer> players = getPlayers();
+        getRegisteredStatistics().forEach(id -> {
             HashMap<UUID, Double> stats = new HashMap<>();
-            for (LBPlayer player : players) {
-                if (!player.isValidStatistic(statID))
-                    continue;
 
-                double value = player.getStatistic(statID);
-
-                stats.put(player.getUuid(), value);
-            }
+            players.stream().filter(lbPlayer -> !lbPlayer.isValidStatistic(id)).forEach(lbPlayer -> stats.put(lbPlayer.getUuid(), lbPlayer.getStatistic(id)));
 
             List<Map.Entry<UUID, Double>> sorted = stats.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList());
             Collections.reverse(sorted);
 
-            sortedStatistics.put(statID, sorted);
-        }
+            sortedStatistics.put(id, sorted);
+        });
     }
     private class Refresh extends BukkitRunnable {
 

@@ -86,7 +86,6 @@ public class PAPIHook extends PlaceholderExpansion {
      * <br>We specify the value identifier in this method.
      * <br>Since version 2.9.1 can you use OfflinePlayers in your requests.
      *
-     * @param player
      * @param identifier A String containing the identifier/value.
      * @return possibly-null String of the requested identifier.
      */
@@ -103,29 +102,26 @@ public class PAPIHook extends PlaceholderExpansion {
         String stat = registeredStats.stream().filter(s -> paths[0].equalsIgnoreCase(s)).findFirst().orElse(null);
 
         String noData = plugin.getConfig().getString("no-data-placeholder", "N/A");
-        if (stat == null) {
+        if (stat == null)
             return noData;
-        }
+
 
         DecimalFormat df = new DecimalFormat("###,###,###,###,###,###.##");
 
         List<Map.Entry<UUID, Double>> entry = LBManager.getInstance().getSortedStatistics().getOrDefault(stat, null);
-        if (entry == null) {
+        if (entry == null)
             return noData;
-        }
 
         if (paths[1].equalsIgnoreCase("self")) {
             Map.Entry<UUID, Double> data = entry.stream().filter(uuidObjectEntry -> uuidObjectEntry.getKey().equals(player.getUniqueId())).findFirst().orElse(null);
-            if (data == null) {
+            if (data == null)
                 return noData;
-            }
-            if (paths[2].equalsIgnoreCase("position")) {
-                return String.valueOf((entry.indexOf(data) + 1));
-            }
 
-            if (paths[2].equalsIgnoreCase("value")) {
+            if (paths[2].equalsIgnoreCase("position"))
+                return String.valueOf((entry.indexOf(data) + 1));
+
+            if (paths[2].equalsIgnoreCase("value"))
                 return df.format(data.getValue());
-            }
 
             return null;
         }
@@ -135,8 +131,7 @@ public class PAPIHook extends PlaceholderExpansion {
                 int placement = 0;
                 try {
                     placement = (Integer.parseInt(paths[3]) - 1);
-                } catch (Exception ignored) {
-                }
+                } catch (Exception ignored) {}
 
                 Map.Entry<UUID, Double> data;
                 try {
@@ -144,6 +139,7 @@ public class PAPIHook extends PlaceholderExpansion {
                 } catch (Exception e) {
                     return noData;
                 }
+
                 return Bukkit.getOfflinePlayer(data.getKey()).getName();
             }
 
@@ -151,8 +147,7 @@ public class PAPIHook extends PlaceholderExpansion {
                 int placement = 0;
                 try {
                     placement = (Integer.parseInt(paths[3]) - 1);
-                } catch (Exception ignored) {
-                }
+                } catch (Exception ignored) {}
 
                 Map.Entry<UUID, Double> data;
                 try {
@@ -160,6 +155,7 @@ public class PAPIHook extends PlaceholderExpansion {
                 }  catch (Exception e) {
                     return noData;
                 }
+
                 return df.format(data.getValue());
             }
 
