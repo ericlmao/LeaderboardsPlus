@@ -1,9 +1,4 @@
 name: LeaderboardsPlus
 version: ${project.version}
-main: dev.negativekb.leaderboardsplus.LeaderboardsPlus
-depend: [PlaceholderAPI]
-
-commands:
-  forcerefresh:
-    description: Forcefully refresh the leaderboards
-    usage: /<command>
+main: dev.negativekb.api.leaderboards.LeaderboardsPlus
+depend: [ PlaceholderAPI ]
