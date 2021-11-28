@@ -25,3 +25,4 @@ Repository and API for LeaderboardsPlus. Create and track your own custom statis
 ```
 
 #### Visit the wiki here: https://github.com/NegativeKB/LeaderboardsPlus/wiki
+#### Install the plugin here: https://www.spigotmc.org/resources/leaderboardsplus-api.93973/
