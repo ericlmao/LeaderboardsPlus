@@ -2,6 +2,7 @@ package dev.negativekb.api.leaderboards.core.structure;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -28,11 +29,11 @@ public enum LeaderboardRequestType {
     public AtomicReference<String> get(Leaderboard<?, ?> leaderboard, Stream<Leaderboard.Entry<String, String>> parsedSorted, boolean findingPosition, String input, int position) {
         DecimalFormat df = new DecimalFormat("###,###,###,###.##");
         AtomicReference<String> value = new AtomicReference<>();
-        String error = (leaderboard.errorMessage() == null ? "&cError!" : leaderboard.errorMessage());
+        String error = ChatColor.translateAlternateColorCodes('&', leaderboard.errorMessage() == null ? "&cError!" : leaderboard.errorMessage());
         switch (this) {
             case NAME: {
                 if (findingPosition)
-                    value.set(parsedSorted.skip(position - 1).map(Leaderboard.Entry::getKey).findFirst().orElse(error));
+                    value.set(parsedSorted.filter(entry -> entry.getKey() != null).skip((position - 1)).map(Leaderboard.Entry::getKey).findFirst().orElse(error));
                 else
                     value.set(error);
                 break;
@@ -42,7 +43,7 @@ public enum LeaderboardRequestType {
                 if (findingPosition)
                     value.set(parsedSorted.skip(position - 1).map(Leaderboard.Entry::getValue).findFirst().orElse(error));
                 else
-                    value.set(parsedSorted.filter((entry -> entry.getKey().equals(input))).map(Leaderboard.Entry::getValue)
+                    value.set(parsedSorted.filter((entry -> entry.getKey() != null && entry.getKey().equals(input))).map(Leaderboard.Entry::getValue)
                             .findFirst().orElse(error));
                 break;
             }
@@ -51,6 +52,8 @@ public enum LeaderboardRequestType {
                 if (!findingPosition) {
                     AtomicInteger pos = new AtomicInteger(1);
                     Optional<Leaderboard.Entry<String, String>> entry = parsedSorted.filter(e -> {
+                        if (e.getKey() == null)
+                            return false;
                         if (e.getKey().equals(input))
                             return true;
                         pos.incrementAndGet();
